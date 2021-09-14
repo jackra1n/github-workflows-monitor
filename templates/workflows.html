@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}
+Workflows
+{% endblock %}
+{% block content %}
+<table class="table text-light">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for workflow in workflows %}
+    <tr>
+      <th scope="row">1</th>
+      <td>{{ workflow.name }}</td>
+      <td>{{ workflow.state}}</td>
+      <td>@mdo</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

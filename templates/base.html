@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+  <title>
+      {% block title %}
+          
+      {% endblock %}
+  </title>
+  <meta name='viewport' content='width=device-width, initial-scale=1'>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  <style>
+    body {
+      background: #292B3E;
+      color: white;
+    }
+
+    .background-secondary {
+      background: #222334;
+    }
+
+    .register-container {
+      min-width: 300px;
+      min-height: 200px;
+      max-width: 400px;
+      margin-top: 35vh;
+    }
+  </style>
+</head>
+
+<body class="vh-100 d-flex flex-column align-items-center">
+  <nav class="navbar navbar-expand-lg navbar-dark background-secondary w-100">
+    <div class="container-fluid">
+      <a class="navbar-brand text-primary" href="#">Github Workflows Monitor</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link" href="/home">Home</a>
+          <a class="nav-link" href="/workflows">Workflows</a>
+          <a class="nav-link disabled">Disabled</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  {% block content %}
+      
+  {% endblock content %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ" crossorigin="anonymous"></script>
+</body>
+
+</html>
