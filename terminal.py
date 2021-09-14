@@ -62,4 +62,4 @@ for workflow in workflows:
 if len(latest_runs_failed) > 0:
     print(f'{bcolors.BOLD}{bcolors.UNDERLINE}There are failed workflows!{bcolors.ENDC}')
     for failed_run in latest_runs_failed:
-        print(f'{bcolors.FAIL} {failed_run.repository.name}: {bcolors.ENDC} {failed_run.html_url}')
+        print(f'{bcolors.FAIL} {failed_run.repository.name:24s} {bcolors.ENDC} {failed_run.html_url}')
