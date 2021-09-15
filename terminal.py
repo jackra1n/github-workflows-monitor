@@ -1,6 +1,7 @@
 from github import Github
 from pathlib import Path
 
+import time
 import json
 
 project_folder = Path(__file__).parent.resolve()
@@ -32,24 +33,35 @@ with open(settings_path, "r") as settings:
 
 if not settings['token']:
     print(f'No token in {settings_path}! Please add it and try again.')
+    print('https://github.com/settings/tokens')
     exit()
 
 g = Github(settings['token'])
 
-orgs = g.get_user().get_orgs() 
 all_orgs_repos = []
 workflows = []
 latest_runs = []
 latest_runs_failed = []
 
+start = time.time()
+orgs = g.get_user().get_orgs()
+
+print("Getting all repos...")
+tic = time.perf_counter()
 for org in orgs: 
-    for repo in org.get_repos():
-        all_orgs_repos.append(repo)
+    all_orgs_repos.extend(org.get_repos())
+toc = time.perf_counter()
+print(f"Found {len(all_orgs_repos)} repos. Took {toc - tic:0.4f} seconds\n")
 
+print("Getting all workflows...")
+tic = time.perf_counter()
 for repo in all_orgs_repos:
-    for workflow in repo.get_workflows():
-        workflows.append(workflow)
+    workflows.extend(repo.get_workflows())
+toc = time.perf_counter()
+print(f"Found {len(workflows)} workflows. Took {toc - tic:0.4f} seconds\n")
 
+print("Checking workflow runs...")
+tic = time.perf_counter()
 for workflow in workflows:
     runs = workflow.get_runs()
     try:
@@ -58,6 +70,11 @@ for workflow in workflows:
             latest_runs_failed.append(runs[0])
     except IndexError:
         pass
+toc = time.perf_counter()
+print(f"Took {toc - tic:0.4f} seconds\n")
+
+end = time.time()
+print(f'Total: {end - start:0.4f}s')
 
 if len(latest_runs_failed) > 0:
     print(f'{bcolors.BOLD}{bcolors.UNDERLINE}There are failed workflows!{bcolors.ENDC}')
