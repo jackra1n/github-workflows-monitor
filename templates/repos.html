@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Repos - GWM{% endblock %}
+{% block content %}
+    <h2>Repos of <span class="text-primary">{{ repos[0].owner.login }}</span> <span class="text-muted">({{ repos|length }})</span></h2>
+    {% for repo in repos %}
+    <div class="card background-secondary mt-2 col-12">
+      <div class="card-header text-primary">{{ repo.name }}</div>
+      <div class="card-body">
+        <a href="{{ url_for('repo', repo_name=repo.name, owner_name=repo.owner.login) }}" class="stretched-link link-success text-decoration-none">
+          <p class="card-text text-light">Last updated by <span class="text-muted">{{ repo.name }}</span> at <span class="text-muted">{{ repo.updated_at }}</span></p>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+{% endblock %}

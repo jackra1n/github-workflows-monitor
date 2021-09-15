@@ -1,13 +1,14 @@
 {% extends 'base.html' %}
-{% block title %}
-Github Workflows Monitor
-{% endblock %}
+{% block title %}Github Workflows Monitor{% endblock %}
+
 {% block content %}
-<div class="d-flex justify-content-center border border-primary rounded p-4 background-secondary register-container">
+<div class="col-6 d-flex justify-content-center border border-primary rounded p-4 background-secondary register-container">
   <div class="d-flex flex-column justify-content-center">
-    <h1 class="text-light">{{ user }}</h1>
-    {% if user is none %}
-    <button type="button" class="btn btn-primary">Login</button>
+    {% if g.user is none %}
+    <p>No user logged in</p>
+    <a class="btn btn-primary" href="/login">Login</a>
+    {% else %}
+    <h1 class="text-light">{{ g.user.github_login }}</h1>
     {% endif %}
   </div>
 </div>

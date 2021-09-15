@@ -2,3 +2,4 @@
 
 PyGithub
 Flask
+github-flask

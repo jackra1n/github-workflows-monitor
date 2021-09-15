@@ -1,32 +1,11 @@
+from util import terminal_colors as clr
+
 from github import Github
-from pathlib import Path
 
 import time
 import json
 
-project_folder = Path(__file__).parent.resolve()
-settings_path = f'{project_folder}/data/token.json'
-default_settings = {
-        "token": ""
-    }
-
-class bcolors:
-    HEADER = '\033[95m'
-    OKBLUE = '\033[94m'
-    OKCYAN = '\033[96m'
-    OKGREEN = '\033[92m'
-    WARNING = '\033[93m'
-    FAIL = '\033[91m'
-    ENDC = '\033[0m'
-    BOLD = '\033[1m'
-    UNDERLINE = '\033[4m'
-
-Path(f'{project_folder}/data').mkdir(parents=True, exist_ok=True)
-
-if not Path(settings_path).is_file():
-    print(f'Creating token.json')
-    with open(settings_path, 'a') as f:
-        json.dump(default_settings, f, indent=2)
+settings_path = f'./data/token.json'
 
 with open(settings_path, "r") as settings:
     settings = json.load(settings)
@@ -77,6 +56,6 @@ end = time.time()
 print(f'Total: {end - start:0.4f}s')
 
 if len(latest_runs_failed) > 0:
-    print(f'{bcolors.BOLD}{bcolors.UNDERLINE}There are failed workflows!{bcolors.ENDC}')
+    print(f'{clr.BOLD}{clr.UNDERLINE}There are failed workflows!{clr.ENDC}')
     for failed_run in latest_runs_failed:
-        print(f'{bcolors.FAIL} {failed_run.repository.name:24s} {bcolors.ENDC} {failed_run.html_url}')
+        print(f'{clr.FAIL} {failed_run.repository.name:24s} {clr.ENDC} {failed_run.html_url}')

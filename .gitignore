@@ -139,3 +139,4 @@ cython_debug/
 
 # added by jackra1n
 /data/token.json
+/data/main.sqlite
