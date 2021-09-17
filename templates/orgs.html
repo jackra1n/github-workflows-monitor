@@ -2,22 +2,31 @@
 {% block title %}Organizations - GWM{% endblock %}
 
 {% block content %}
-    <h2>Organizations of <span class="text-primary">{{ g.user.github_login }}</span><span class="text-muted"> ({{ orgs|length }})</span></h2>
-    {% for org in orgs %}
-    <div class="card background-secondary mt-2 col-12">
-      <div class="row g-0">
-        <div class="col-2 p-2">
-          <img src="{{ org.avatar_url }}" width="64" alt="{{ org.login }}">
-        </div>
-        <div class="col-md-8 d-flex align-items-center">
-          <div class="card-body p-1">
-            <a href="{{ url_for('repos', org_name=org.login) }}" class="stretched-link text-decoration-none">
-              <h5 class="card-tittle fw-bold">{{ org.login }}</h5>
-              <p class="card-text text-muted"></p>
-            </a>
-          </div>
+{% include 'includes/add-org-modal.html' %}
+  <div class="d-flex w-100 justify-content-between">
+    <div>
+      <h2 class="mb-0">Organizations of <span class="text-primary">{{ g.user.github_login }}</span><span class="text-muted"> ({{ orgs|length }})</span></h2>
+      <a class="text-muted">Missing organizations?</a>
+    </div>
+    <div>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOrgModal">Add organization</button>  
+    </div>
+  </div>
+  {% for org in orgs %}
+  <div class="card background-secondary mt-2 col-12">
+    <div class="row g-0">
+      <div class="col-2 p-2">
+        <img src="{{ org.avatar_url }}" width="64" alt="{{ org.login }}">
+      </div>
+      <div class="col-md-8 d-flex align-items-center">
+        <div class="card-body p-1">
+          <a href="{{ url_for('repos', org_name=org.login) }}" class="stretched-link text-decoration-none">
+            <h5 class="card-tittle fw-bold">{{ org.login }}</h5>
+            <p class="card-text text-muted"></p>
+          </a>
         </div>
       </div>
     </div>
-    {% endfor %}
+  </div>
+  {% endfor %}
 {% endblock %}

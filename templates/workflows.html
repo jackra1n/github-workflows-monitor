@@ -6,14 +6,12 @@
     {% for run in failed_runs %}
     <div class="card background-secondary mt-2 col-12">
       <div class="row g-0">
-        <!-- <div class="col-2 p-2">
-          <img src="" width="64" alt="{{ run.name }}">
-        </div> -->
         <div class="col-md-8 d-flex align-items-center">
           <div class="card-body text-muted p-2">
             <h5 class="card-tittle fw-bold"><span class="text-primary">{{ run.name }}</span> on repo <span class="text-primary">{{ run.repository.full_name }}</span></h5>
             <p class="card-text text-muted">State <span class="text-danger">{{ run.conclusion }}</span></p>
             <p class="card-text text-muted">Last commit by <span class="text-primary">{{ run.head_commit.author.name }}</span></p>
+            <a class="text-decoration-none" href="{{ run.html_url }}">Run link</a>
           </div>
         </div>
       </div>
@@ -23,15 +21,12 @@
     {% for workflow in workflows %}
     <div class="card background-secondary mt-2 col-12">
       <div class="row g-0">
-        <!-- <div class="col-2 p-2">
-          <img src="{{ workflow.badge_url }}" width="64" alt="{{ workflow.name }}">
-        </div> -->
         <div class="col-md-8 d-flex align-items-center">
           <div class="card-body p-2">
-            <a href="#" class="stretched-link text-decoration-none">
-              <h5 class="card-tittle fw-bold">{{ workflow.name }}</h5>
-              <p class="card-text text-muted">State: <span>{{ workflow.state }}</span></p>
-            </a>
+            <h5 class="card-tittle fw-bold"><span class="text-primary">{{ workflow.name }}</span> on repo <span class="text-primary">{{ workflow.repository.full_name }}</span></h5>
+            <p class="card-text text-muted">State <span class="text-success">{{ workflow.conclusion }}</span></p>
+            <p class="card-text text-muted">Last commit by <span class="text-primary">{{ workflow.head_commit.author.name }}</span></p>
+            <a class="text-decoration-none" href="{{ workflow.html_url }}">Run link</a>
           </div>
         </div>
       </div>

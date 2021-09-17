@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block title %}Repos - GWM{% endblock %}
 {% block content %}
+  {% if repos is defined and repos|length > 0 %}
     <h2>Repos of <span class="text-primary">{{ repos[0].owner.login }}</span> <span class="text-muted">({{ repos|length }})</span></h2>
     {% for repo in repos %}
     <div class="card background-secondary mt-2 col-12">
@@ -12,4 +13,11 @@
       </div>
     </div>
     {% endfor %}
+  {% else %}
+  <div class="col-6 d-flex justify-content-center border border-primary rounded p-4 background-secondary register-container">
+    <div class="d-flex flex-column justify-content-center">
+      <h2 class="text-center">No visible repos for <span class="text-primary">{{ org_name }}</span></h2>
+    </div>
+  </div>
+  {% endif %}
 {% endblock %}

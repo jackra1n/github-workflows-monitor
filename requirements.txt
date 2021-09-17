@@ -3,3 +3,4 @@
 PyGithub
 Flask
 github-flask
+flask-wtf

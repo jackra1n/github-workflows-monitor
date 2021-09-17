@@ -18,7 +18,6 @@ if not settings['token']:
 g = Github(settings['token'])
 
 all_orgs_repos = []
-workflows = []
 latest_runs = []
 latest_runs_failed = []
 
@@ -35,22 +34,15 @@ print(f"Found {len(all_orgs_repos)} repos. Took {toc - tic:0.4f} seconds\n")
 print("Getting all workflows...")
 tic = time.perf_counter()
 for repo in all_orgs_repos:
-    workflows.extend(repo.get_workflows())
-toc = time.perf_counter()
-print(f"Found {len(workflows)} workflows. Took {toc - tic:0.4f} seconds\n")
-
-print("Checking workflow runs...")
-tic = time.perf_counter()
-for workflow in workflows:
-    runs = workflow.get_runs()
     try:
-        latest_runs.append(runs[0])
-        if runs[0].conclusion != 'success':
-            latest_runs_failed.append(runs[0])
+        last_run = repo.get_workflow_runs()[0]
+        latest_runs.append(last_run)
+        if last_run.conclusion != 'success':
+            latest_runs_failed.append(last_run)
     except IndexError:
         pass
 toc = time.perf_counter()
-print(f"Took {toc - tic:0.4f} seconds\n")
+print(f"Found {len(latest_runs)} workflows. Took {toc - tic:0.4f} seconds\n")
 
 end = time.time()
 print(f'Total: {end - start:0.4f}s')

@@ -1,0 +1,22 @@
+<div class="modal" id="addOrgModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content mt-5">
+        <div class="modal-header">
+          <h5 class="modal-title">Add organization</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="POST" class="d-flex align-items-center">
+            {{ form.hidden_tag() }}
+            {{ form.org_github_name.label(class="my-3 me-3 text-nowrap") }}
+            {{ form.org_github_name(class="form-control", placeholder="Github name") }}
+            {{ form.submit(class="btn btn-primary") }}
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,11 +1,10 @@
 from util import store, util, db
-from util.db import User, db_session
+from util.db import db_session, User, Organization
+from src.forms import AddOrganizationForm
 
-from flask import Flask, render_template, session, request, url_for, redirect, g
+from flask import Flask, render_template, session, request, url_for, redirect, g, jsonify
 from flask_github import GitHub
 from pathlib import Path
-
-import json
 
 SECRET_KEY = 'development key'
 store.ROOT_DIR = Path(__file__).parent.resolve()
@@ -17,6 +16,18 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 github = GitHub(app)
+
+def get_all_user_orgs():
+    if g.user is not None:
+        all_orgs = []
+        for org in github.get(f'/user/orgs'):
+            all_orgs.append(org)
+        for org in github.get(f'/users/{g.user.github_login}/orgs'):
+            if org not in all_orgs:
+                all_orgs.append(org)
+        for org in Organization.query.filter_by(user_github_id=g.user.github_id).all():
+            all_orgs.append(github.get(f'/orgs/{org.github_login}'))
+        return all_orgs
 
 
 # =========================
@@ -30,35 +41,44 @@ def home():
 
 @app.route("/workflows")
 def workflows():
-    orgs = github.get(f'/user/orgs')
     all_workflow_runs = []
     failed_runs = []
-    for org in orgs:
+    for org in get_all_user_orgs():
         all_org_repos = github.get(f'/orgs/{org["login"]}/repos')
         for repo in all_org_repos:
             repo_workflows = github.get(f'/repos/{repo["full_name"]}/actions/runs')
             if repo_workflows['total_count'] > 0:
-                for workflow in repo_workflows['workflow_runs']:
-                    if workflow['conclusion'] == 'success':
-                        all_workflow_runs.append(workflow)
-                    elif workflow['conclusion'] == 'failure':
-                        failed_runs.append(workflow)
+                run = repo_workflows['workflow_runs'][0]
+                if run['conclusion'] == 'success':
+                    all_workflow_runs.append(run)
+                elif run['conclusion'] == 'failure':
+                    failed_runs.append(run)
     return render_template('workflows.html', workflows=all_workflow_runs, failed_runs=failed_runs)
 
-@app.route("/orgs")
+@app.route("/orgs", methods=['GET', 'POST'])
 def orgs():
-    orgs = github.get(f'/user/orgs')
-    return render_template('orgs.html', orgs = orgs)
+    form = AddOrganizationForm()
+    if form.validate_on_submit():
+        org = Organization(form.org_github_name.data, g.user.github_login)
+        db_session.add(org)
+        db_session.commit()
+        return redirect(url_for('orgs'))
+    orgs = get_all_user_orgs()
+    return render_template('orgs.html', orgs=orgs, form=form)
 
 @app.route("/<org_name>/repos")
 def repos(org_name):
     repos = github.get(f'/orgs/{org_name}/repos')
-    return render_template('repos.html', repos=repos)
+    return render_template('repos.html', repos=repos, org_name=org_name)
 
 @app.route("/repo/<owner_name>/<repo_name>")
 def repo(owner_name, repo_name):
     repo = github.get(f'/repos/{owner_name}/{repo_name}')
     return render_template('repo.html', repo=repo)
+
+@app.route("/api/orgs")
+def api_orgs():
+    return jsonify(github.get(f'/user/orgs'))
 
 
 # =========================
@@ -111,7 +131,7 @@ def authorized(access_token):
 @app.route('/login')
 def login():
     if session.get('user_id', None) is None:
-        return github.authorize(scope="user,read:org,repo")
+        return github.authorize(scope="read:user,repo,read:org")
     else:
         return 'Already logged in'
 
