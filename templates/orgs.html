@@ -6,7 +6,7 @@
   <div class="d-flex w-100 justify-content-between">
     <div>
       <h2 class="mb-0">Organizations of <span class="text-primary">{{ g.user.github_login }}</span><span class="text-muted"> ({{ orgs|length }})</span></h2>
-      <a class="text-muted">Missing organizations?</a>
+      <a href="{{ url_for('missing_organizations') }}" class="text-muted">Missing organizations?</a>
     </div>
     <div>
       <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addOrgModal">Add organization</button>  

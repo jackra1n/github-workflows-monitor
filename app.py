@@ -76,6 +76,10 @@ def repo(owner_name, repo_name):
     repo = github.get(f'/repos/{owner_name}/{repo_name}')
     return render_template('repo.html', repo=repo)
 
+@app.route("/missing-organizations")
+def missing_organizations():
+    return render_template('missing-organizations.html')
+
 @app.route("/api/orgs")
 def api_orgs():
     return jsonify(github.get(f'/user/orgs'))

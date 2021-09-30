@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Github Workflows Monitor{% endblock %}
+
+{% block content %}
+<div
+  class="col-6 d-flex justify-content-center border border-primary rounded p-4 background-secondary register-container">
+  <div class="d-flex flex-column justify-content-center">
+    <h2>Missing organizations</h2>
+    <p>There are 2 most common problems if it comes to missing organizations.</p>
+    <ul>
+      <li>1. Application has no access to the organization</li>
+      <li>2. Your organization isnt public on your profile</li>
+    </ul>
+    <p>If your organization only has public repositories then the easiest way to solve the problem is to just make the
+      organization public on your profile. If your organization isn't public then the app will have to get access to
+      your organization. </p>
+    <p>If you're the organization owner then you can click "Grant" button next to your organization when you're loggin
+      to this application.
+      If you're member of a organization you will see "Requst" button instead and a organization owner will be informed
+      that you want to use this app.
+    </p>
+  </div>
+</div>
+{% endblock %}
