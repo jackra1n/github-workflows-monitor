@@ -9,6 +9,7 @@
       <div class="card-body">
         <a href="{{ url_for('repo', repo_name=repo.name, owner_name=repo.owner.login) }}" class="stretched-link link-success text-decoration-none">
           <p class="card-text text-light">Last updated by <span class="text-muted">{{ repo.name }}</span> at <span class="text-muted">{{ repo.updated_at }}</span></p>
+          {{ repo }}
         </a>
       </div>
     </div>
