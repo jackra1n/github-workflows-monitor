@@ -69,6 +69,8 @@ def orgs():
 @app.route("/<org_name>/repos")
 def repos(org_name):
     repos = github.get(f'/orgs/{org_name}/repos')
+    for repo in repos:
+        repo["last_commit"] = github.get(f'/repos/{org_name}/{repo["name"]}/commits')[0]
     return render_template('repos.html', repos=repos, org_name=org_name)
 
 @app.route("/repo/<owner_name>/<repo_name>")

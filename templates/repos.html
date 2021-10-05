@@ -8,8 +8,7 @@
       <div class="card-header text-primary">{{ repo.name }}</div>
       <div class="card-body">
         <a href="{{ url_for('repo', repo_name=repo.name, owner_name=repo.owner.login) }}" class="stretched-link link-success text-decoration-none">
-          <p class="card-text text-light">Last updated by <span class="text-muted">{{ repo.name }}</span> at <span class="text-muted">{{ repo.updated_at }}</span></p>
-          {{ repo }}
+          <p class="card-text text-light">Last commit by <span class="text-muted">{{ repo.last_commit.commit.author.name }}</span> at <span class="text-muted">{{ repo.last_commit.commit.author.date }}</span></p>
         </a>
       </div>
     </div>
