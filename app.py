@@ -1,6 +1,6 @@
 from util import store, util, db
 from util.db import db_session, User, Organization
-from src.forms import AddOrganizationForm
+from src.forms import AddOrganizationForm, JenkinsApiForm
 
 from flask import Flask, render_template, session, request, url_for, redirect, g, jsonify
 from flask_github import GitHub
@@ -81,6 +81,14 @@ def repo(owner_name, repo_name):
 @app.route("/missing-organizations")
 def missing_organizations():
     return render_template('missing-organizations.html')
+
+@app.route("/settings", methods=['GET', 'POST'])
+def settings():
+    form = JenkinsApiForm()
+    if form.validate_on_submit():
+        g.jenkins_url = form.jenkins_url.data
+        return redirect(url_for('settings'))
+    return render_template('settings.html', form=form)
 
 @app.route("/api/orgs")
 def api_orgs():
