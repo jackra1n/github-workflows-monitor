@@ -6,6 +6,8 @@ from flask import Flask, render_template, session, request, url_for, redirect, g
 from flask_github import GitHub
 from pathlib import Path
 
+import requests
+
 SECRET_KEY = 'development key'
 store.ROOT_DIR = Path(__file__).parent.resolve()
 
@@ -37,7 +39,7 @@ def get_all_user_orgs():
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template('home.html')
+    return render_template('home.html', jenkins_url=session.get('jenkins_url'))
 
 @app.route("/workflows")
 def workflows():
@@ -86,9 +88,33 @@ def missing_organizations():
 def settings():
     form = JenkinsApiForm()
     if form.validate_on_submit():
-        g.jenkins_url = form.jenkins_url.data
+        session['jenkins_url'] = form.jenkins_url.data
         return redirect(url_for('settings'))
-    return render_template('settings.html', form=form)
+    return render_template('settings.html', form=form, jenkins_url=session.get('jenkins_url'))
+
+@app.route("/jenkins")
+def jenkins():
+    #fetch jenkins build jobs from url
+    jenkins_url = session.get('jenkins_url')
+    if jenkins_url is None:
+        return redirect(url_for('settings'))
+    jenkins_url = jenkins_url.rstrip('/')
+    jenkins_response = requests.get(f'https://{jenkins_url}/api/json?pretty=true')
+    if jenkins_response.status_code != 200:
+        return render_template('jenkins.html', error='Error fetching Jenkins jobs')
+    jenkins_json = jenkins_response.json()
+    jenkins_jobs = jenkins_json['jobs']
+    #fetch jenkins builds from url
+    jenkins_builds = {}
+    for job in jenkins_jobs:
+        job_name = job['name']
+        job_url = f'https://{jenkins_url}/job/{job_name}/api/json?pretty=true'
+        job_response = requests.get(job_url)
+        if job_response.status_code != 200:
+            return render_template('jenkins.html', error='Error fetching Jenkins builds')
+        job_json = job_response.json()
+        jenkins_builds[job_name] = job_json['builds']
+    return render_template('jenkins.html', jenkins_builds=jenkins_builds)
 
 @app.route("/api/orgs")
 def api_orgs():

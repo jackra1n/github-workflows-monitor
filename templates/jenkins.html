@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Settings - GWM{% endblock %}
+
+{% block content %}
+<div
+  class="col-6 d-flex flex-column justify-content-center align-items-center border border-primary rounded p-4 background-secondary register-container">
+  <h2>Jenkins builds</h2>
+  <div class="d-flex flex-column justify-content-center">
+    {% for build in jenkins_builds %}
+    <div class="d-flex flex-row justify-content-between align-items-center">
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <h3>{{ build.name }}</h3>
+        <p>{{ build.status }}</p>
+      </div>
+      <div class="d-flex flex-column justify-content-center align-items-center">
+        <a href="{{ build.url }}" target="_blank">
+          <img src="{{ build.icon }}" alt="{{ build.name }}" class="img-fluid">
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
